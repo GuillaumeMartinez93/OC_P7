@@ -6,3 +6,4 @@ pydantic==1.9.0
 uvicorn==0.17.6
 scikit-learn==0.24.1
 json5==0.9.5
+xgboost==1.5.2
