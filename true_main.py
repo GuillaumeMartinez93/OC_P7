@@ -75,8 +75,13 @@ async def predict(client_to_predict: client_data):
     poly_features['SK_ID_CURR'] = data['SK_ID_CURR']
     data = data.merge(poly_features.drop(columns=['EXT_SOURCE_1', 'EXT_SOURCE_2', 'EXT_SOURCE_3', 'DAYS_BIRTH']), on = 'SK_ID_CURR', how = 'left')
     
-    data=OHE_loaded.transform(data)
-    
+    data_object = data.select_dtypes('object')
+    codes = OHE_loaded.transform(data_object).toarray()
+    feature_names = OHE_loaded.get_feature_names(data.select_dtypes('object').columns)
+    data = pd.concat([data.select_dtypes(exclude='object'), 
+               pd.DataFrame(codes,columns=feature_names).astype(int)], axis=1)
+
+
     data=scaler_loaded.transform(data)
         
     return json.dumps(model_loaded.predict_proba(data)[:,1].tolist())
