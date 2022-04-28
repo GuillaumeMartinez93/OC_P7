@@ -1,0 +1,1 @@
+web: uvicorn true_main:app
