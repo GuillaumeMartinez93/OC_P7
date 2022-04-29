@@ -1,1 +1,0 @@
-worker: uvicorn true_main:app
