@@ -15,9 +15,14 @@ import json
 class client_data(BaseModel):
     data: dict
 
-file_name='Imputer'
+file_name='ImputerNum'
 open_file = open(file_name, "rb")
-imputer_loaded = pickle.load(open_file)
+imputer_num_loaded = pickle.load(open_file)
+open_file.close()
+
+file_name='ImputerObj'
+open_file = open(file_name, "rb")
+imputer_obj_loaded = pickle.load(open_file)
 open_file.close()
 
 file_name='Poly'
@@ -44,6 +49,11 @@ file_name='NumCol'
 open_file = open(file_name, "rb")
 num_col_loaded = pickle.load(open_file)
 open_file.close()
+
+file_name='ObjCol'
+open_file = open(file_name, "rb")
+obj_col_loaded = pickle.load(open_file)
+open_file.close()
         
 file_name='dtype'
 open_file = open(file_name, "rb")
@@ -60,7 +70,8 @@ async def predict(client_to_predict: client_data):
     
     data=data.astype(dtype_loaded.to_dict() )
     
-    data[num_col_loaded]=imputer_loaded.transform(data[num_col_loaded])
+    data[num_col_loaded]=imputer_num_loaded.transform(data[num_col_loaded])
+    data[obj_col_loaded]=imputer_obj_loaded.transform(data[obj_col_loaded])
     
     data['CREDIT_INCOME_PERCENT'] = data['AMT_CREDIT'] / data['AMT_INCOME_TOTAL']
     data['ANNUITY_INCOME_PERCENT'] = data['AMT_ANNUITY'] / data['AMT_INCOME_TOTAL']
@@ -71,14 +82,15 @@ async def predict(client_to_predict: client_data):
     poly_features = poly_transformer_loaded.transform(poly_features)
     poly_features = pd.DataFrame(poly_features, 
                         columns = poly_transformer_loaded.get_feature_names(['EXT_SOURCE_1', 'EXT_SOURCE_2', 
-                                                                           'EXT_SOURCE_3', 'DAYS_BIRTH']))
-    poly_features['SK_ID_CURR'] = data['SK_ID_CURR']
-    data = data.merge(poly_features.drop(columns=['EXT_SOURCE_1', 'EXT_SOURCE_2', 'EXT_SOURCE_3', 'DAYS_BIRTH']), on = 'SK_ID_CURR', how = 'left')
-    
-    data_object = data.select_dtypes('object')
+                                                                           'EXT_SOURCE_3', 'DAYS_BIRTH']),
+                        index=0)
+    data=pd.concat([data,
+                        poly_features.drop(columns=['EXT_SOURCE_1', 'EXT_SOURCE_2', 'EXT_SOURCE_3', 'DAYS_BIRTH'])],axis=1)
+
+    data_object = data[obj_col_loaded]
     codes = OHE_loaded.transform(data_object).toarray()
-    feature_names = OHE_loaded.get_feature_names(data.select_dtypes('object').columns)
-    data = pd.concat([data.select_dtypes(exclude='object'), 
+    feature_names = OHE_loaded.get_feature_names(obj_col_loaded)
+    data = pd.concat([data[obj_col_loaded], 
                pd.DataFrame(codes,columns=feature_names).astype(int)], axis=1)
 
 
