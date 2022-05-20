@@ -2,13 +2,6 @@ import pickle
 import streamlit as st
 import pandas as pd
 import numpy as np
-import shap
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-from sklearn import model_selection
-from sklearn.neighbors import NearestNeighbors
-import seaborn as sns
-import json
 
 st.set_page_config(layout="wide")
 
