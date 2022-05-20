@@ -57,6 +57,6 @@ def main():
     selection = st.sidebar.radio("Go to", PAGES)
 
     if selection=="Tableau clientèle":
-	    tab_client()
+	    tab_client(db_test)
 
 main()
