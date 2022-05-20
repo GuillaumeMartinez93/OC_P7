@@ -13,6 +13,13 @@ def load_data():
 	open_file.close()
 	return db_test
 
+def filter(df,col,value):
+	if value!='All':
+		db_filtered=df.loc[df[col]==value]
+	else:
+		db_filtered=df
+	return db_filtered
+
 def tab_client(db_test):
 
 	st.title('Dashboard Pret à dépenser')
