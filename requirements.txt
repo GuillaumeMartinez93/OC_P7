@@ -7,3 +7,4 @@ uvicorn==0.17.6
 scikit-learn==0.24.1
 json5==0.9.5
 xgboost==1.5.2
+shap==0.40.0
