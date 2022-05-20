@@ -9,8 +9,6 @@ from sklearn import model_selection
 from sklearn.neighbors import NearestNeighbors
 import seaborn as sns
 import json
-import streamlit.components.v1 as components
-import dvc.api
 
 st.set_page_config(layout="wide")
 
