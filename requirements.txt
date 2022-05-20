@@ -8,3 +8,4 @@ scikit-learn==0.24.1
 json5==0.9.5
 xgboost==1.5.2
 streamlit==1.8.1
+requests==2.25.1

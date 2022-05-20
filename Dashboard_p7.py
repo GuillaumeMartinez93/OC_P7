@@ -2,6 +2,8 @@ import pickle
 import streamlit as st
 import pandas as pd
 import numpy as np
+import json
+import requests
 
 st.set_page_config(layout="wide")
 
@@ -51,6 +53,20 @@ def tab_client(db_test):
 
 	st.dataframe(db_display)
 	st.markdown("**Total clients correspondants: **"+str(len(db_display)))
+
+def prediction (client) :
+	dictio={"data" :predictset_loaded[predictset_loaded['SK_ID_CURR']==client].to_dict('r')[0]}
+	json_object = json.dumps(dictio,indent=4) 
+	url = "https://apphomecredit.herokuapp.com/predict"
+	headers = {"Content-Type":"application/json"}
+	x = requests.post(url, headers=headers ,data = json_object )
+	pred=float(x.text.split("[")[1].split("]")[0])
+	if pred >= 0.51 :
+		result='Rejected'
+	else :
+		result='Approved'
+	return pred, result
+
 
 def main():
     db_test=load_data()
