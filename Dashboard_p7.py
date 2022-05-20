@@ -61,18 +61,11 @@ def main():
 	    "Visualisation score",
 	    "Comparaison clientèle"
 	]
-    st.sidebar.write('')
-	st.sidebar.write('')
-
     st.sidebar.title('Pages')
-	selection = st.sidebar.radio("Go to", PAGES)
+	
+    selection = st.sidebar.radio("Go to", PAGES)
 
-	if selection=="Tableau clientèle":
-		tab_client()
-	if selection=="Visualisation score":
-		pass
-	if selection=="Comparaison clientèle":
-        pass
+    if selection=="Tableau clientèle":
+	    tab_client()
 
-if __name__ == '__main__':
-	main()
+main()
