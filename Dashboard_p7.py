@@ -83,7 +83,7 @@ def prediction (db_test,client) :
 
 def get_client(db_test):
 	client=st.sidebar.selectbox('Client',db_test['SK_ID_CURR'])
-	idx_client=db_test.index[db_test['SK_ID_CURR']==client][0]
+	idx_client=db_test[db_test['SK_ID_CURR']==client].index[0]
 	return client, idx_client
 
 def infos_client(db_test,client,idx_client):
