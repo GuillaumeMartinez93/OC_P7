@@ -113,8 +113,8 @@ def gauge_visualization(db_test,client) :
             'value': 0.51}
     }))	
 	fig.update_layout(height = 250)
-	fig.suptitle(result, fontsize=26,color=color(result))
 	st.plotly_chart(fig)
+	st.subheader(result)
 
 db_test=load_data()
 PAGES = [
