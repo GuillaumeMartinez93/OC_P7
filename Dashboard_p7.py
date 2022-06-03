@@ -114,7 +114,7 @@ def gauge_visualization(db_test,client) :
     }))	
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
-	st.subheader(result)
+	st.subheader('Demande de prêt : '+result)
 
 db_test=load_data()
 PAGES = [
