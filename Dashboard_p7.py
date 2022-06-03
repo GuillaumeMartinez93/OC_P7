@@ -113,7 +113,7 @@ def gauge_visualization(db_test,client) :
             'value': 0.51}
     }))	
 	fig.update_layout(height = 250)
-	fig.subtitle(result, fontsize=26,color=color(result))
+	fig.suptitle(result, fontsize=26,color=color(result))
 	st.plotly_chart(fig)
 
 db_test=load_data()
