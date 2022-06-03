@@ -125,3 +125,4 @@ if selection=="Tableau clientèle" :
 if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
+	gauge_visualization(db_test,idx_client)
