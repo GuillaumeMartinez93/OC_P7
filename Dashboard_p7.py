@@ -55,8 +55,8 @@ def tab_client(db_test):
 	st.dataframe(db_display)
 	st.markdown("**Total clients correspondants: **"+str(len(db_display)))
 
-def prediction (db_test,idx_client) :
-	dictio={"data" :db_test[db_test['SK_ID_CURR']==idx_client].drop(columns=['YEARS_BIRTH']).to_dict('r')[0]}
+def prediction (db_test,client) :
+	dictio={"data" :db_test[db_test['SK_ID_CURR']==client].drop(columns=['YEARS_BIRTH']).to_dict('r')[0]}
 	json_object = json.dumps(dictio,indent=4) 
 	url = "https://apphomecredit.herokuapp.com/predict"
 	headers = {"Content-Type":"application/json"}
@@ -71,7 +71,7 @@ def prediction (db_test,idx_client) :
 def get_client(db_test):
 	client=st.sidebar.selectbox('Client',db_test['SK_ID_CURR'])
 	idx_client=db_test.index[db_test['SK_ID_CURR']==client][0]
-	return client,idx_client
+	return client
 
 def infos_client(db_test,client,idx_client):
 	st.sidebar.markdown("**ID client: **"+str(client))
@@ -89,11 +89,11 @@ def color(pred):
 		col='Red'
 	return col
 
-def gauge_visualization(db_test,idx_client) :
+def gauge_visualization(db_test,client) :
 	st.title('Dashboard Pret à dépenser')
 	st.subheader('Visualisation score')
 
-	pred,result=prediction(db_test,idx_client)
+	pred,result=prediction(db_test,client)
 
 	fig = go.Figure(go.Indicator(
     mode = "number+gauge+delta", value = pred,
@@ -125,4 +125,4 @@ if selection=="Tableau clientèle" :
 if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
-	gauge_visualization(db_test,idx_client)
+	gauge_visualization(db_test,client)
