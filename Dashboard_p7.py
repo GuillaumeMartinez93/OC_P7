@@ -108,7 +108,7 @@ def gauge_visualization(db_test,client) :
         'bar' : {'color' : 'red' }
     }))	
 	fig.update_layout(height = 250)
-	fig.show()
+	st.plotly_chart(fig)
 
 db_test=load_data()
 PAGES = [
