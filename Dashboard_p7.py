@@ -102,7 +102,7 @@ def color(pred):
 		col='Red'
 	return col
 
-def gauge_visualization(db_test,client,exp_value,shap_values) :
+def gauge_visualization(db_test,client,idx_client,exp_value,shap_values) :
 	st.title('Dashboard Pret à dépenser')
 	st.subheader('Visualisation score')
 
@@ -128,7 +128,7 @@ def gauge_visualization(db_test,client,exp_value,shap_values) :
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
 	st.subheader('Demande de prêt : '+result)
-	st_shap(shap.force_plot(exp_value, shap_values[client], features = db_test.iloc[client], feature_names=db_test.columns, figsize=(12,5)))
+	st_shap(shap.force_plot(exp_value, shap_values[client], features = db_test.iloc[idx_client], feature_names=db_test.columns, figsize=(12,5)))
 
 
 def st_shap(plot, height=None):
@@ -150,4 +150,4 @@ if selection=="Tableau clientèle" :
 if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
-	gauge_visualization(db_test,client,exp_value,shap_values)
+	gauge_visualization(db_test,client,idx_client,exp_value,shap_values)
