@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import json
 import requests
+import plotly.graph_objects as go
 
 st.set_page_config(layout="wide")
 
@@ -54,8 +55,8 @@ def tab_client(db_test):
 	st.dataframe(db_display)
 	st.markdown("**Total clients correspondants: **"+str(len(db_display)))
 
-def prediction (client) :
-	dictio={"data" :predictset_loaded[predictset_loaded['SK_ID_CURR']==client].to_dict('r')[0]}
+def prediction (db_test,idx_client) :
+	dictio={"data" :db_test[db_test['SK_ID_CURR']==idx_client].drop(columns=['YEARS_BIRTH']).to_dict('r')[0]}
 	json_object = json.dumps(dictio,indent=4) 
 	url = "https://apphomecredit.herokuapp.com/predict"
 	headers = {"Content-Type":"application/json"}
@@ -80,6 +81,34 @@ def infos_client(db_test,client,idx_client):
 	st.sidebar.markdown("**Age: **"+str(db_test.loc[idx_client,'YEARS_BIRTH']))	
 	st.sidebar.markdown("**Statut pro.: **"+db_test.loc[idx_client,'NAME_INCOME_TYPE'])
 	st.sidebar.markdown("**Niveau d'études: **"+db_test.loc[idx_client,'NAME_EDUCATION_TYPE'])
+
+def color(pred):
+	if pred=='Approved':
+		col='Green'
+	else :
+		col='Red'
+	return col
+
+def gauge_visualization(db_test,idx_client) :
+	st.title('Dashboard Pret à dépenser')
+	st.subheader('Visualisation score')
+
+	pred,result=prediction(db_test,idx_client)
+
+	fig = go.Figure(go.Indicator(
+    mode = "number+gauge+delta", value = pred,
+    domain = {'x': [0, 1], 'y': [0, 1]},
+    delta = {'reference': 0.51,'increasing': {'color': "red"},'decreasing':{'color':'green'}},
+    gauge = {
+        'shape': "bullet",
+        'axis': {'range': [0, 1]},
+        'steps': [
+            {'range': [0, 0.51], 'color': "lightgreen"},
+            {'range': [0.51, 1], 'color': "lightcoral"}],
+        'bar' : {'color' : 'red' }
+    }))	
+	fig.update_layout(height = 250)
+	fig.show()
 
 db_test=load_data()
 PAGES = [
