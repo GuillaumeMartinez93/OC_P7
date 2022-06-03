@@ -8,6 +8,7 @@ import requests
 import plotly.graph_objects as go
 import plotly as plt
 import shap
+import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide")
 
