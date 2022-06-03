@@ -68,13 +68,11 @@ def prediction (client) :
 	return pred, result
 
 def get_client(db_test):
-	"""Sélection d'un client via une selectbox"""
 	client=st.sidebar.selectbox('Client',db_test['SK_ID_CURR'])
 	idx_client=db_test.index[db_test['SK_ID_CURR']==client][0]
 	return client,idx_client
 
 def infos_client(db_test,client,idx_client):
-	"""Affichage des infos du client sélectionné dans la barre latérale"""
 	st.sidebar.markdown("**ID client: **"+str(client))
 	st.sidebar.markdown("**Sexe: **"+db_test.loc[idx_client,'CODE_GENDER'])
 	st.sidebar.markdown("**Statut familial: **"+db_test.loc[idx_client,'NAME_FAMILY_STATUS'])
@@ -83,22 +81,18 @@ def infos_client(db_test,client,idx_client):
 	st.sidebar.markdown("**Statut pro.: **"+db_test.loc[idx_client,'NAME_INCOME_TYPE'])
 	st.sidebar.markdown("**Niveau d'études: **"+db_test.loc[idx_client,'NAME_EDUCATION_TYPE'])
 
-def main():
-    db_test=load_data()
-    PAGES = [
-	    "Tableau clientèle",
-	    "Visualisation score",
-	    "Comparaison clientèle"
+db_test=load_data()
+PAGES = [
+	"Tableau clientèle",
+	"Visualisation score",
+	"Comparaison clientèle"
 	]
-    st.sidebar.title('Pages')
+st.sidebar.title('Pages')
 	
-    selection = st.sidebar.radio("Go to", PAGES)
+selection = st.sidebar.radio("Go to", PAGES)
 
-    if selection=="Tableau clientèle":
-	    tab_client(db_test)
-	if selection=="Visualisation score":
-	    client,idx_client=get_client(db_test)
-		infos_client(db_test,client,idx_client)
-
-
-main()
+if selection=="Tableau clientèle" :
+    tab_client(db_test)
+if selection=="Visualisation score" :
+	client,idx_client=get_client(db_test)
+	infos_client(db_test,client,idx_client)
