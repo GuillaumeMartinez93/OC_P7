@@ -17,11 +17,6 @@ def load_data():
 	db_test = pickle.load(open_file)
 	open_file.close()
 
-	file_name='Model'
-	open_file = open(file_name, "rb")
-	model = pickle.load(open_file)
-	open_file.close()
-
 	file_name='shapvalues'
 	open_file = open(file_name, "rb")
 	shap_values = pickle.load(open_file)
