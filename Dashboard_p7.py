@@ -97,6 +97,8 @@ def gauge_visualization(db_test,client) :
 
 	fig = go.Figure(go.Indicator(
     mode = "number+gauge+delta", value = pred,
+	number = {'font':{'size':48}},
+	title = {'text': result, 'font': {'size': 28, 'color':color(result)}},
     domain = {'x': [0, 1], 'y': [0, 1]},
     delta = {'reference': 0.51,'increasing': {'color': "red"},'decreasing':{'color':'green'}},
     gauge = {
@@ -106,6 +108,10 @@ def gauge_visualization(db_test,client) :
             {'range': [0, 0.51], 'color': "lightgreen"},
             {'range': [0.51, 1], 'color': "lightcoral"}],
         'bar' : {'color' : color(result) }
+		 'threshold': {
+            'line': {'color': "black", 'width': 5},
+            'thickness': 1,
+            'value': 0.48}
     }))	
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
