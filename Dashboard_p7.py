@@ -1,10 +1,12 @@
 import pickle
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import json
 import requests
 import plotly.graph_objects as go
+import shap
 
 st.set_page_config(layout="wide")
 
@@ -14,7 +16,18 @@ def load_data():
 	open_file = open(file_name, "rb")
 	db_test = pickle.load(open_file)
 	open_file.close()
-	return db_test
+
+	file_name='Model'
+	open_file = open(file_name, "rb")
+	model = pickle.load(open_file)
+	open_file.close()
+
+	explainer = shap.TreeExplainer(model)
+	shap_values = explainer.shap_values(db_test)[1]
+	exp_value=explainer.expected_value[1]
+
+
+	return db_test,exp_value,shap_values
 
 def filter(df,col,value):
 	if value!='All':
@@ -89,7 +102,7 @@ def color(pred):
 		col='Red'
 	return col
 
-def gauge_visualization(db_test,client) :
+def gauge_visualization(db_test,client,exp_value,shap_values) :
 	st.title('Dashboard Pret à dépenser')
 	st.subheader('Visualisation score')
 
@@ -115,8 +128,14 @@ def gauge_visualization(db_test,client) :
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
 	st.subheader('Demande de prêt : '+result)
+	st_shap(shap.force_plot(exp_value, shap_values[client], features = db_test.iloc[client], feature_names=db_test.columns, figsize=(12,5)))
 
-db_test=load_data()
+
+def st_shap(plot, height=None):
+	shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
+	components.html(shap_html, height=height)
+
+db_test,exp_value,shap_values=load_data()
 PAGES = [
 	"Tableau clientèle",
 	"Visualisation score",
@@ -131,4 +150,4 @@ if selection=="Tableau clientèle" :
 if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
-	gauge_visualization(db_test,client)
+	gauge_visualization(db_test,client,model,exp_value,shap_values)
