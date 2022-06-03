@@ -107,11 +107,11 @@ def gauge_visualization(db_test,client) :
         'steps': [
             {'range': [0, 0.51], 'color': "lightgreen"},
             {'range': [0.51, 1], 'color': "lightcoral"}],
-        'bar' : {'color' : color(result) }
-		 'threshold': {
+        'bar' : {'color' : color(result) },
+		'threshold': {
             'line': {'color': "black", 'width': 5},
             'thickness': 1,
-            'value': 0.48}
+            'value': 0.51}
     }))	
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
