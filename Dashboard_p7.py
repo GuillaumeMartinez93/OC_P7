@@ -22,10 +22,17 @@ def load_data():
 	model = pickle.load(open_file)
 	open_file.close()
 
-	explainer = shap.TreeExplainer(model)
-	shap_values = explainer.shap_values(db_test)[1]
-	exp_value=explainer.expected_value[1]
+	file_name='shapvalues'
+	open_file = open(file_name, "rb")
+	shap_values = pickle.load(open_file)
+	open_file.close()
 
+	file_name='explainer'
+	open_file = open(file_name, "rb")
+	explainer = pickle.load(open_file)
+	open_file.close()
+
+	exp_value=explainer.expected_value
 
 	return db_test,exp_value,shap_values
 
