@@ -56,7 +56,7 @@ def tab_client(db_test):
 	st.markdown("**Total clients correspondants: **"+str(len(db_display)))
 
 def prediction (db_test,client) :
-	dictio={"data" :db_test[db_test['SK_ID_CURR']==client].drop(columns=['YEARS_BIRTH']).to_dict('r')[0]}
+	dictio={"data" :db_test[db_test['SK_ID_CURR']==client].drop(columns=['YEARS_BIRTH']).to_dict('records')[0]}
 	json_object = json.dumps(dictio,indent=4) 
 	url = "https://apphomecredit.herokuapp.com/predict"
 	headers = {"Content-Type":"application/json"}
