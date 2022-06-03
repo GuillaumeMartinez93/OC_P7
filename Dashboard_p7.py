@@ -22,12 +22,10 @@ def load_data():
 	shap_values = pickle.load(open_file)
 	open_file.close()
 
-	file_name='explainer'
+	file_name='exp_value'
 	open_file = open(file_name, "rb")
-	explainer = pickle.load(open_file)
+	exp_value = pickle.load(open_file)
 	open_file.close()
-
-	exp_value=explainer.expected_value
 
 	return db_test,exp_value,shap_values
 
