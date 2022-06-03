@@ -129,7 +129,7 @@ def gauge_visualization(db_test,client,idx_client,exp_value,shap_values) :
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
 	st.subheader('Demande de prêt : '+result)
-	st_shap(shap.force_plot(exp_value, shap_values[idx_client], features = db_test.iloc[idx_client], feature_names=db_test.columns, figsize=(12,5)))
+	st.pyplot(shap.force_plot(exp_value, shap_values[idx_client], features = db_test.iloc[idx_client], feature_names=db_test.columns, figsize=(12,5),matplotlib=True))
 
 
 def st_shap(plot, height=None):
