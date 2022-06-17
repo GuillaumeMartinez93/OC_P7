@@ -164,7 +164,6 @@ def chart_box(title,row,df,col,client):
 		fig,ax=plt.subplots()
 		sns.boxplot(x=df[col],ax=ax)
 		plt.axvline(x=df.loc[client,col],ymax=0.95,color='red')
-		plt.legend()
 		st.pyplot(fig)
 
 def chart_pie(title,row,df,col,client):
