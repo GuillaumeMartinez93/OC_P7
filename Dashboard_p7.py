@@ -9,6 +9,7 @@ import plotly.graph_objects as go
 import plotly as plt
 import shap
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 st.set_page_config(layout="wide")
 
@@ -156,11 +157,45 @@ def comparaison (db_test,idx_client) :
 	chart_bar("Répartition du statut professionel",row2_10,db_test,'NAME_INCOME_TYPE',idx_client)
 	chart_bar("Répartition du niveau d'études",row2_2,db_test,'NAME_EDUCATION_TYPE',idx_client)
 	chart_bar("Répartition du type de logement",row2_3,db_test,'NAME_HOUSING_TYPE',idx_client)
-	st.dataframe(db_test[['SK_ID_CURR','CODE_GENDER','YEARS_BIRTH','NAME_FAMILY_STATUS','CNT_CHILDREN',
-	'NAME_EDUCATION_TYPE','FLAG_OWN_CAR','FLAG_OWN_REALTY','NAME_HOUSING_TYPE',
-	'NAME_INCOME_TYPE','AMT_INCOME_TOTAL','AMT_CREDIT','AMT_ANNUITY']])
 
+def chart_kde(title,row,df,col,client):
+	"""Définition des graphes KDE avec une ligne verticale indiquant la position du client"""
+	with row:
+		st.subheader(title)
+		fig,ax = plt.subplots()
+		sns.kdeplot(df.loc[df['TARGET']==0,col],color='green', label = 'Target == 0')
+		sns.kdeplot(df.loc[df['TARGET']==1,col],color='red', label = 'Target == 1')
+		plt.axvline(x=df.loc[client,col],ymax=0.95,color='black')
+		plt.legend()
+		st.pyplot(fig)
 
+def chart_bar(title,row,df,col,client):
+	"""Définition des graphes barres avec une ligne horizontale indiquant la position du client"""
+	with row:
+		st.subheader(title)
+		fig,ax = plt.subplots()
+		data=df[['TARGET',col]]
+		if data[col].dtypes!='object':
+			data[col]=data[col].astype('str')
+
+			data1=round(data[col].loc[data['TARGET']==1].value_counts()/data[col].loc[data['TARGET']==1].value_counts().sum()*100,2)
+			data0=round(data[col].loc[data['TARGET']==0].value_counts()/data[col].loc[data['TARGET']==0].value_counts().sum()*100,2)
+			data=pd.concat([pd.DataFrame({"Pourcentage":data0,'TARGET':0}),pd.DataFrame({'Pourcentage':data1,'TARGET':1})]).reset_index().rename(columns={'index':col})
+			sns.barplot(data=data,x='Pourcentage', y=col, hue='TARGET', palette=['green','red'], order=sorted(data[col].unique()));
+			
+			data[col]=data[col].astype('int64')
+
+			plt.axhline(y=sorted(data[col].unique()).index(df.loc[client,col]),xmax=0.95,color='black',linewidth=4)
+			st.pyplot(fig)
+		else:
+
+			data1=round(data[col].loc[data['TARGET']==1].value_counts()/data[col].loc[data['TARGET']==1].value_counts().sum()*100,2)
+			data0=round(data[col].loc[data['TARGET']==0].value_counts()/data[col].loc[data['TARGET']==0].value_counts().sum()*100,2)
+			data=pd.concat([pd.DataFrame({"Pourcentage":data0,'TARGET':0}),pd.DataFrame({'Pourcentage':data1,'TARGET':1})]).reset_index().rename(columns={'index':col})
+			sns.barplot(data=data,x='Pourcentage', y=col, hue='TARGET', palette=['green','red'], order=sorted(data[col].unique()));
+			
+			plt.axhline(y=sorted(data[col].unique()).index(df.loc[client,col]),xmax=0.95,color='black',linewidth=4)
+			st.pyplot(fig)
 
 db_test,exp_value,shap_values,predictset_scaled=load_data()
 PAGES = [
