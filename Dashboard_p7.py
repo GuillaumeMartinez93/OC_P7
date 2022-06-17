@@ -162,7 +162,7 @@ def chart_box(title,row,df,col,client):
 	with row:
 		st.subheader(title)
 		fig,ax=plt.subplots()
-		sns.boxplot(x=col, y="Value", data=df,ax=ax)
+		sns.boxplot(x=df[col],ax=ax)
 		plt.legend()
 		st.pyplot(fig)
 
