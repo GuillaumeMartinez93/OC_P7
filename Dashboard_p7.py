@@ -8,6 +8,7 @@ import requests
 import plotly.graph_objects as go
 import plotly as plt
 import shap
+import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide")
 
@@ -28,7 +29,11 @@ def load_data():
 	exp_value = pickle.load(open_file)
 	open_file.close()
 
-	return db_test,exp_value,shap_values
+	file_name='Predictset_scaled'
+	open_file = open(file_name, "rb")
+	predictset_scaled= pickle.load(open_file)
+
+	return db_test,exp_value,shap_values,predictset_scaled
 
 def filter(df,col,value):
 	if value!='All':
@@ -103,7 +108,7 @@ def color(pred):
 		col='Red'
 	return col
 
-def gauge_visualization(db_test,client,idx_client,exp_value,shap_values) :
+def gauge_visualization(db_test,predictset_scaled,client,idx_client,exp_value,shap_values) :
 	st.title('Dashboard Pret à dépenser')
 	st.subheader('Visualisation score')
 
@@ -129,14 +134,14 @@ def gauge_visualization(db_test,client,idx_client,exp_value,shap_values) :
 	fig.update_layout(height = 250)
 	st.plotly_chart(fig)
 	st.subheader('Demande de prêt : '+result)
-	st.pyplot(shap.force_plot(exp_value, shap_values[idx_client], features = db_test.iloc[idx_client], feature_names=db_test.columns, figsize=(12,5),matplotlib=True))
+	st_shap(shap.force_plot(exp_value, shap_values[idx_client], features = predictset_scaled.iloc[idx_client], feature_names=predictset_scaled.columns, figsize=(12,5)))
 
 
 def st_shap(plot, height=None):
 	shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
 	components.html(shap_html, height=height)
 
-db_test,exp_value,shap_values=load_data()
+db_test,exp_value,shap_values,predictset_scaled=load_data()
 PAGES = [
 	"Tableau clientèle",
 	"Visualisation score",
@@ -151,4 +156,4 @@ if selection=="Tableau clientèle" :
 if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
-	gauge_visualization(db_test,client,idx_client,exp_value,shap_values)
+	gauge_visualization(db_test,predictset_scaled,client,idx_client,exp_value,shap_values)
