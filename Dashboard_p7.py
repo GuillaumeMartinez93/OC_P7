@@ -169,7 +169,7 @@ def chart_box(title,row,df,col,client):
 def chart_pie(title,row,df,col,client):
 	with row:
 		st.subheader(title)
-		value=df.iloc[client[col]]
+		value=df.iloc[client][col]
 		a=df[col[df[col]==value]].count()
 		b=df[col[df[col]!=value]].count()
 		c=a+b
