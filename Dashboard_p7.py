@@ -152,11 +152,11 @@ def comparaison (db_test,idx_client) :
 	df=db_test.head(size)
 	chart_box("Répartition de l'age",row1_1,df,'YEARS_BIRTH',idx_client)
 	chart_box("Répartition des revenus",row1_2,df,'AMT_INCOME_TOTAL',idx_client)
-	chart_pie("Répartition du nombre d'enfants",row1_3,df,'CNT_CHILDREN',idx_client)
+	chart_pie_not_binary("Répartition du nombre d'enfants",row1_3,df,'CNT_CHILDREN',idx_client)
 
-	chart_pie("Répartition du statut professionel",row2_10,df,'NAME_INCOME_TYPE',idx_client)
-	chart_pie("Répartition du niveau d'études",row2_2,df,'NAME_EDUCATION_TYPE',idx_client)
-	chart_pie("Répartition du type de logement",row2_3,df,'NAME_HOUSING_TYPE',idx_client)
+	chart_pie_not_binary("Répartition du statut professionel",row2_10,df,'NAME_INCOME_TYPE',idx_client)
+	chart_pie_not_binary("Répartition du niveau d'études",row2_2,df,'NAME_EDUCATION_TYPE',idx_client)
+	chart_pie_not_binary("Répartition du type de logement",row2_3,df,'NAME_HOUSING_TYPE',idx_client)
 
 def chart_box(title,row,df,col,client):
 	with row:
@@ -177,6 +177,22 @@ def chart_pie(title,row,df,col,client):
 		labels=[str(value),'Other Value']
 		fig,ax=plt.subplots()
 		ax.pie(sizes,explode=[0.05]*2, labels=labels, autopct='%1.1f%%', startangle=45)
+		st.pyplot(fig)
+
+def chart_pie_not_binary(title,row,df,col,client):
+	with row:
+		st.subheader(title)
+		values=[]
+		counts=[]
+		for value in df[col].unique():
+			values.append(value)
+			count=df[col][df[col]==value].count()
+			counts.append(count)
+		c=counts.sum()
+		sizes =counts/c
+		labels=values
+		fig,ax=plt.subplots()
+		ax.pie(sizes,explode=[0.03]*len(labels), labels=labels, autopct='%1.1f%%', startangle=45)
 		st.pyplot(fig)
 
 db_test,exp_value,shap_values,predictset_scaled=load_data()
