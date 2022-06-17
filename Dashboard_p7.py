@@ -162,9 +162,9 @@ def chart_box(title,row,df,col,client):
 	with row:
 		st.subheader(title)
 		fig,ax = plt.subplots()
-		ax.boxplot(df[col])
+		sns.boxplot(x=col, y="Value", data=df)
 		plt.legend()
-		st.pyplot(fig)
+		st.pyplot(plt.gcf)
 
 def chart_pie(title,row,df,col,client):
 	with row:
@@ -177,7 +177,7 @@ def chart_pie(title,row,df,col,client):
 		sizes =[a/c,b/c]
 		labels=[str(value),]
 		ax.pie(sizes, explode=explose, labels=labels, autopct='%1.1f%%', startangle=45)
-		st.pyplot(fig)
+		st.pyplot(plt.gcf)
 
 db_test,exp_value,shap_values,predictset_scaled=load_data()
 PAGES = [
