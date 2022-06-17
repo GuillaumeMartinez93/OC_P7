@@ -152,11 +152,11 @@ def comparaison (db_test,idx_client) :
 	df=db_test.head(size)
 	chart_box("Répartition de l'age",row1_1,df,'YEARS_BIRTH',idx_client)
 	chart_box("Répartition des revenus",row1_2,df,'AMT_INCOME_TOTAL',idx_client)
-	chart_pie_not_binary("Répartition du nombre d'enfants",row1_3,df,'CNT_CHILDREN',idx_client)
+	chart_pie_binary("Répartition du nombre d'enfants",row1_3,df,'CNT_CHILDREN',idx_client)
 
-	chart_pie_not_binary("Répartition du statut professionel",row2_10,df,'NAME_INCOME_TYPE',idx_client)
-	chart_pie_not_binary("Répartition du niveau d'études",row2_2,df,'NAME_EDUCATION_TYPE',idx_client)
-	chart_pie_not_binary("Répartition du type de logement",row2_3,df,'NAME_HOUSING_TYPE',idx_client)
+	chart_pie_binary("Répartition du statut professionel",row2_10,df,'NAME_INCOME_TYPE',idx_client)
+	chart_pie_binary("Répartition du niveau d'études",row2_2,df,'NAME_EDUCATION_TYPE',idx_client)
+	chart_pie_binary("Répartition du type de logement",row2_3,df,'NAME_HOUSING_TYPE',idx_client)
 
 def chart_box(title,row,df,col,client):
 	with row:
@@ -166,7 +166,7 @@ def chart_box(title,row,df,col,client):
 		plt.axvline(x=df.loc[client,col],ymax=0.95,color='red')
 		st.pyplot(fig)
 
-def chart_pie(title,row,df,col,client):
+def chart_pie_binary(title,row,df,col,client):
 	with row:
 		st.subheader(title)
 		value=df.iloc[client][col]
