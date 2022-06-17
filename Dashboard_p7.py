@@ -163,6 +163,7 @@ def chart_box(title,row,df,col,client):
 		st.subheader(title)
 		fig,ax=plt.subplots()
 		sns.boxplot(x=df[col],ax=ax)
+		plt.axvline(x=df.loc[client,col],ymax=0.95,color='black')
 		plt.legend()
 		st.pyplot(fig)
 
