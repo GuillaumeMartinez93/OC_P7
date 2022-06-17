@@ -161,9 +161,10 @@ def comparaison (db_test,idx_client) :
 def chart_box(title,row,df,col,client):
 	with row:
 		st.subheader(title)
-		sns.boxplot(x=col, y="Value", data=df)
+		fig,ax=plt.subplots()
+		sns.boxplot(x=col, y="Value", data=df,ax=ax)
 		plt.legend()
-		st.pyplot(plt.gcf)
+		st.pyplot(fig)
 
 def chart_pie(title,row,df,col,client):
 	with row:
@@ -173,9 +174,10 @@ def chart_pie(title,row,df,col,client):
 		b=df[col[df[col]!=value]].count()
 		c=a+b
 		sizes =[a/c,b/c]
-		labels=[str(value),]
-		sns.pie(sizes, explode=explose, labels=labels, autopct='%1.1f%%', startangle=45)
-		st.pyplot(plt.gcf)
+		labels=[str(value),'Other Value']
+		fig,ax=plt.subplots()
+		sns.pie(sizes, explode=explose, labels=labels, autopct='%1.1f%%', startangle=45,ax=ax)
+		st.pyplot(fig)
 
 db_test,exp_value,shap_values,predictset_scaled=load_data()
 PAGES = [
