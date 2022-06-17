@@ -169,14 +169,17 @@ def chart_box(title,row,df,col,client):
 def chart_pie(title,row,df,col,client):
 	with row:
 		st.subheader(title)
-		value=df.iloc[client][col].values
+		if type(df.iloc[client][col])==int :
+			value=type(df.iloc[client][col])
+		else :
+			value=df.iloc[client][col].values
 		a=df[col[df[col]==value]].count()
 		b=df[col[df[col]!=value]].count()
 		c=a+b
 		sizes =[a/c,b/c]
 		labels=[str(value),'Other Value']
 		fig,ax=plt.subplots()
-		sns.pie(sizes, explode=explose, labels=labels, autopct='%1.1f%%', startangle=45,ax=ax)
+		sns.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=45,ax=ax)
 		st.pyplot(fig)
 
 db_test,exp_value,shap_values,predictset_scaled=load_data()
