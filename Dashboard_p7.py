@@ -176,7 +176,7 @@ def chart_pie(title,row,df,col,client):
 		sizes =[a/c,b/c]
 		labels=[str(value),'Other Value']
 		fig,ax=plt.subplots()
-		ax.pie(sizes,explode=[0.05,0.05] labels=labels, autopct='%1.1f%%', startangle=45)
+		ax.pie(sizes,explode=[0.05]*2 labels=labels, autopct='%1.1f%%', startangle=45)
 		st.pyplot(fig)
 
 db_test,exp_value,shap_values,predictset_scaled=load_data()
