@@ -188,7 +188,7 @@ def chart_pie_not_binary(title,row,df,col,client):
 			values.append(value)
 			count=df[col][df[col]==value].count()
 			counts.append(count)
-		c=counts.sum()
+		c=sum(counts)
 		sizes =counts/c
 		labels=values
 		fig,ax=plt.subplots()
