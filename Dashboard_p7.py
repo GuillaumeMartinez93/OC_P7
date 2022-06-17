@@ -195,7 +195,7 @@ if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
 	gauge_visualization(db_test,predictset_scaled,client,idx_client,exp_value,shap_values)
-if selection=="COmparaison clientèle" :
+if selection=="Comparaison clientèle" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
 	comparaison(db_test,idx_client)
