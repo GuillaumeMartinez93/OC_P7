@@ -141,6 +141,27 @@ def st_shap(plot, height=None):
 	shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
 	components.html(shap_html, height=height)
 
+def comparaison (db_test,idx_client) :
+	st.title('Dashboard Pret à dépenser')
+	st.subheader('Comparaison clientèle')
+	size=row1.slider("Taille du groupe de comparaison",min_value=10,max_value=1000,value=500)
+	row1_1,row1_2,row1_3 = st.columns(3)
+	st.write('')
+	row2_10,row2_2,row2_3 = st.columns(3)
+	
+	chart_kde("Répartition de l'age",row1_1,db_test,'YEARS_BIRTH',idx_client)
+	chart_kde("Répartition des revenus",row1_2,db_test,'AMT_INCOME_TOTAL',idx_client)
+	chart_bar("Répartition du nombre d'enfants",row1_3,db_test,'CNT_CHILDREN',idx_client)
+
+	chart_bar("Répartition du statut professionel",row2_10,db_test,'NAME_INCOME_TYPE',idx_client)
+	chart_bar("Répartition du niveau d'études",row2_2,db_test,'NAME_EDUCATION_TYPE',idx_client)
+	chart_bar("Répartition du type de logement",row2_3,db_test,'NAME_HOUSING_TYPE',idx_client)
+	st.dataframe(db_test[['SK_ID_CURR','CODE_GENDER','YEARS_BIRTH','NAME_FAMILY_STATUS','CNT_CHILDREN',
+	'NAME_EDUCATION_TYPE','FLAG_OWN_CAR','FLAG_OWN_REALTY','NAME_HOUSING_TYPE',
+	'NAME_INCOME_TYPE','AMT_INCOME_TOTAL','AMT_CREDIT','AMT_ANNUITY']])
+
+
+
 db_test,exp_value,shap_values,predictset_scaled=load_data()
 PAGES = [
 	"Tableau clientèle",
@@ -157,3 +178,7 @@ if selection=="Visualisation score" :
 	client,idx_client=get_client(db_test)
 	infos_client(db_test,client,idx_client)
 	gauge_visualization(db_test,predictset_scaled,client,idx_client,exp_value,shap_values)
+if selection=="COmparaison clientèle" :
+	client,idx_client=get_client(db_test)
+	infos_client(db_test,client,idx_client)
+	comparaison(db_test,idx_client)
